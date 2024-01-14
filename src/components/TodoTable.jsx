@@ -3,10 +3,13 @@ import { useDispatch } from "react-redux";
 import { todoActions } from "../store/todoSlice.js";
 import { useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { CircularProgress } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 
 export default function TodoTable() {
+    const [isLoading, setIsLoading] = useState(true)
     const dispatch = useDispatch()
     const todos = useSelector((state) => state.todos)
 
@@ -14,9 +17,13 @@ export default function TodoTable() {
         async function fetchData() {
             const response = await axios.get('https://jsonplaceholder.typicode.com/todos')
             dispatch(todoActions.setData(response.data))
+            setIsLoading(false)
         }
         fetchData()
     }, [dispatch])
+
+    const loader = <CircularProgress />
+
 
     const rows = todos && todos.map(todo => ({
         id: todo.id,
@@ -32,7 +39,12 @@ export default function TodoTable() {
 
     return (
         <div className="data-grid">
-            <DataGrid rows={rows} columns={columns} />
+            {
+                isLoading ? loader :
+                    <DataGrid 
+                    rows={rows} 
+                    columns={columns}
+                     />}
         </div>
     )
 }
