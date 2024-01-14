@@ -1,0 +1,11 @@
+.data-grid {
+  height: 500px;
+  width: 50%;
+  margin: 5rem auto;
+}
+
+@media (max-width:1024px) {
+  .data-grid {
+    width: 100%;
+  }
+}
